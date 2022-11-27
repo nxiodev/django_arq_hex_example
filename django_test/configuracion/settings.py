@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
+    "drf_yasg",
     # Apps
     "apps.webApp",
     "apps.backoffice",
@@ -124,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'backoffice.Administrator'
+AUTH_USER_MODEL = "backoffice.Administrator"
 
 
 # Internationalization
