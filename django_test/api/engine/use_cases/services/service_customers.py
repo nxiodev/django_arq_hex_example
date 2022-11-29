@@ -10,3 +10,6 @@ class Customer(manager.Customer):
 
     def list_customers(self) -> typing.List[entity.Customer]:
         return self.customers_repository.list_customers()
+
+    def get_customer(self, customer_id: int) -> entity.Customer:
+        return self.customers_repository.get_customer(customer_id=customer_id)

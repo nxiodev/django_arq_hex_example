@@ -5,6 +5,9 @@ list_customers = {"get": "list_customers"}
 
 urlpatterns = [
     path(
-        "customers", CustomersViewSet.as_view({**list_customers}), name="crud-customers"
+        "customers", CustomersViewSet.as_view({**list_customers,
+                                               }
+                                              ),
+        name="crud-customers"
     ),
 ]

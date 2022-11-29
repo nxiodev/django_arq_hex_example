@@ -6,6 +6,7 @@ from api.engine.use_cases.ports.secondaries import repository_customers as repos
 from api.engine.use_cases.factory import orm_mapper
 from api.engine.domain.entities import entities_customers as entity
 
+
 # orm
 from apps.webApp.models import customers as models_customers
 
@@ -19,3 +20,9 @@ class Customer(repository.Customer):
         return [
             orm_mapper.constructor_customer_entities(customer) for customer in self._customers_orm_model.objects.all()
         ]
+
+    def get_customer(self, customer_id: int) -> entity.Customer:
+
+        customer = self._customers_orm_model.objects.get(id=customer_id)
+
+        return orm_mapper.constructor_customer_entities(customer)
