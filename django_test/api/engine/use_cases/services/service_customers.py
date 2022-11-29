@@ -13,3 +13,17 @@ class Customer(manager.Customer):
 
     def get_customer(self, customer_id: int) -> entity.Customer:
         return self.customers_repository.get_customer(customer_id=customer_id)
+
+    def create_customer(
+        self,
+        name: str,
+        paternal_surname: str,
+        email: str,
+    ) -> entity.Customer:
+
+        customer = self.customers_repository.create_customer(
+            name=name,
+            paternal_surname=paternal_surname,
+            email=email,
+        )
+        return customer

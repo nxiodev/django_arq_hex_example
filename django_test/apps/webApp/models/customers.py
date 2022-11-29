@@ -6,7 +6,7 @@ from compartidos.models import TimestampedModel
 class Customer(TimestampedModel):
     name = models.CharField(max_length=50)
     paternal_surname = models.CharField(max_length=50)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
 
     def __str__(self):
         return self.name

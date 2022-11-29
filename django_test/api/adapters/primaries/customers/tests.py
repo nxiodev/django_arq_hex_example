@@ -22,12 +22,12 @@ class CustomersAPITest(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    # def test_crear_customers(self):
-    #     url = reverse("crud-customers")
-    #     payload = {
-    #     }
-    #     respuesta = self.client.post(url, payload)
-    #     self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
+    def test_crear_customers(self):
+        url = reverse("crud-customers")
+        payload = {
+        }
+        respuesta = self.client.post(url, payload)
+        self.assertEqual(respuesta.status_code, status.HTTP_201_CREATED)
 
     def test_detail_customers(self):
 

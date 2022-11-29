@@ -5,7 +5,7 @@ from rest_framework import serializers
 class CustomersSerializer(serializers.Serializer):
     """Serializer for Customers"""
 
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(required=False)
     name = serializers.CharField()
     paternal_surname = serializers.CharField()
     email = serializers.CharField()

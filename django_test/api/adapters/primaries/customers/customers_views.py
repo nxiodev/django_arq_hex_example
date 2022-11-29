@@ -75,3 +75,44 @@ class CustomersViewSet(viewsets.GenericViewSet):
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         return Response(data=customer_serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=customers_serializer.CustomersSerializer(),
+        responses={
+            status.HTTP_201_CREATED: customers_serializer.CustomersSerializer(),
+            status.HTTP_400_BAD_REQUEST: NotFoundSerializer,
+        },
+    )
+    def create_customer(self, request) -> Response:
+        customer_serializer = customers_serializer.CustomersSerializer(data=request.data)
+        customer_serializer.is_valid(raise_exception=True)
+
+        try:
+
+            customer = customers_engine.create_customer(
+                name=customer_serializer.validated_data.get("name"),
+                paternal_surname=customer_serializer.validated_data.get("paternal_surname"),
+                email=customer_serializer.validated_data.get("email"),
+            )
+
+            customer = dict(
+                id=customer.id,
+                name=customer.name,
+                paternal_surname=customer.paternal_surname,
+                email=customer.email,
+            )
+        except Exception as e:
+            print(f"'{e}' exception raised in {__name__} at line 105")
+            return Response(
+                data=exceptions.CustomerAlreadyExist(customer_serializer.validated_data.get("email")).message,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        customer_serializer = customers_serializer.CustomersSerializer(
+            data=customer
+        )
+        customer_serializer.is_valid(raise_exception=True)
+
+        return Response(
+            data=customer_serializer.data, status=status.HTTP_201_CREATED
+        )

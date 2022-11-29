@@ -1,1 +1,1 @@
-from .exceptions_customers import CustomerDoesNotExist
+from .exceptions_customers import CustomerDoesNotExist, CustomerAlreadyExist
