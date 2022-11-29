@@ -20,3 +20,18 @@ class Customer(abc.ABC):
                         email: str,
                         ) -> entity.Customer:
         ...
+
+    @abc.abstractmethod
+    def update_customer(self,
+                        id: int,
+                        name: str,
+                        paternal_surname: str,
+                        email: str,
+                        ) -> entity.Customer:
+        ...
+
+    @abc.abstractmethod
+    def delete_customer(self,
+                        id: int,
+                        ) -> None:
+        ...

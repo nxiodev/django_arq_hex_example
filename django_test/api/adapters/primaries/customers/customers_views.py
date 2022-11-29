@@ -116,3 +116,81 @@ class CustomersViewSet(viewsets.GenericViewSet):
         return Response(
             data=customer_serializer.data, status=status.HTTP_201_CREATED
         )
+
+    @swagger_auto_schema(
+        query_serializer=customers_serializer.CustomerQueryParamsSerializer(),
+        request_body=customers_serializer.CustomersSerializer(),
+        responses={
+            status.HTTP_201_CREATED: customers_serializer.CustomersSerializer(),
+            status.HTTP_400_BAD_REQUEST: NotFoundSerializer,
+        },
+    )
+    def update_customer(self, request) -> Response:
+        query_params = request.query_params
+        query_params_serializer = customers_serializer.CustomerQueryParamsSerializer(
+            data=query_params
+        )
+        query_params_serializer.is_valid(raise_exception=True)
+
+        customer_id = query_params_serializer.validated_data.get("customer_id")
+
+        customer_serializer = customers_serializer.CustomersSerializer(data=request.data)
+        customer_serializer.is_valid(raise_exception=True)
+
+        try:
+            customer = customers_engine.update_customer(
+                id=customer_id,
+                name=customer_serializer.validated_data.get("name"),
+                paternal_surname=customer_serializer.validated_data.get("paternal_surname"),
+                email=customer_serializer.validated_data.get("email"),
+            )
+
+            customer = dict(
+                id=customer.id,
+                name=customer.name,
+                paternal_surname=customer.paternal_surname,
+                email=customer.email,
+            )
+        except Exception as e:
+            print(f"'{e}' exception raised in {__name__} at line 155")
+            return Response(
+                data=exceptions.CustomerDoesNotExist(customer_id).message,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        customer_serializer = customers_serializer.CustomersSerializer(
+            data=customer
+        )
+        customer_serializer.is_valid(raise_exception=True)
+
+        return Response(
+            data=customer_serializer.data, status=status.HTTP_201_CREATED
+        )
+
+    @swagger_auto_schema(
+        query_serializer=customers_serializer.CustomerQueryParamsSerializer(),
+        request_body=customers_serializer.CustomersSerializer(),
+        responses={
+            status.HTTP_204_NO_CONTENT: "",
+            status.HTTP_400_BAD_REQUEST: NotFoundSerializer,
+        },
+    )
+    def delete_customer(self, request) -> Response:
+        query_params = request.query_params
+        query_params_serializer = customers_serializer.CustomerQueryParamsSerializer(
+            data=query_params
+        )
+        query_params_serializer.is_valid(raise_exception=True)
+
+        customer_id = query_params_serializer.validated_data.get("customer_id")
+
+        try:
+            customer = customers_engine.delete_customer(id=customer_id)
+        except Exception as e:
+            print(f"'{e}' exception raised in {__name__} at line 205")
+            return Response(
+                data=exceptions.CustomerDoesNotExist(customer_id).message,
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(status=status.HTTP_204_NO_CONTENT)

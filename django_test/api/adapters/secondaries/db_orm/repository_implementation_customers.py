@@ -41,3 +41,22 @@ class Customer(repository.Customer):
         )
 
         return orm_mapper.constructor_customer_entities(customer)
+
+    def update_customer(
+        self,
+        id: int,
+        name: str,
+        paternal_surname: str,
+        email: str,
+    ) -> entity.Customer:
+        customer = self._customers_orm_model.objects.get(id=id)
+        customer.name = name
+        customer.paternal_surname = paternal_surname
+        customer.email = email
+        customer.save(update_fields=["name", "paternal_surname", "email"])
+
+        return orm_mapper.constructor_customer_entities(customer)
+
+    def delete_customer(self, id: int) -> None:
+        customer = self._customers_orm_model.objects.get(id=id)
+        customer.delete()

@@ -27,3 +27,29 @@ class Customer(manager.Customer):
             email=email,
         )
         return customer
+
+    def update_customer(
+        self,
+        id: int,
+        name: str,
+        paternal_surname: str,
+        email: str,
+    ) -> entity.Customer:
+
+        customer = self.customers_repository.update_customer(
+            id=id,
+            name=name,
+            paternal_surname=paternal_surname,
+            email=email,
+        )
+        return customer
+
+    def delete_customer(
+        self,
+        id: int,
+    ) -> None:
+
+        self.customers_repository.delete_customer(
+            id=id,
+        )
+        return None
