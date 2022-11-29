@@ -7,11 +7,11 @@ class TimestampedModel(models.Model):
     timestamp to models
     """
 
-    fecha_creacion = models.DateTimeField(
-        auto_now_add=True, editable=False, db_column="fecha_creacion"
+    created_at = models.DateTimeField(
+        auto_now_add=True, editable=False
     )
-    fecha_edicion = models.DateTimeField(
-        auto_now=True, editable=False, db_column="fecha_edicion"
+    updated_at = models.DateTimeField(
+        auto_now=True, editable=False
     )
 
     class Meta:
