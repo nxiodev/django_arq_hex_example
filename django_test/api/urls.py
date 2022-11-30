@@ -15,7 +15,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("", include("api.adapters.primaries.customers.urls")),
-    # path("", include("apps.authentication.urls")),
+    path("", include("api.adapters.primaries.payments.urls")),
 
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",

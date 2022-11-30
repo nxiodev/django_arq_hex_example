@@ -15,13 +15,11 @@ import os
 
 from environs import Env
 
-
 env = Env()
 env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -85,7 +83,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "configuracion.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -100,12 +97,10 @@ DATABASES = {
     }
 }
 
-
 print(
     f"Conectado con el usuario {DATABASES['default']['USER']} a "
     f"{DATABASES['default']['HOST']}/{DATABASES['default']['NAME']}"
 )
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -127,7 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "backoffice.Administrator"
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -138,7 +132,6 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -151,6 +144,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 1000,
+    # "DEFAULT_PERMISSION_CLASSES": (
+    #     "rest_framework.permissions.DjangoModelPermissions",
+    # )
 }
 
 # Default primary key field type

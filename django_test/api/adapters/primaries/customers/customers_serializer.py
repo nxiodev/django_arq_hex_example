@@ -10,19 +10,6 @@ class CustomersSerializer(serializers.Serializer):
     paternal_surname = serializers.CharField()
     email = serializers.CharField()
 
-
-class PaymentsCustomersSerializer(serializers.Serializer):
-    """Serializer for PaymentsCustomers"""
-
-    id = serializers.IntegerField()
-    customer = CustomersSerializer(read_only=True)
-    product_name = serializers.CharField()
-    amount = serializers.FloatField()
-    quantity = serializers.IntegerField()
-    created_at = serializers.DateField()
-    updated_at = serializers.DateField()
-
-
 class CustomerQueryParamsSerializer(serializers.Serializer):
     """Serializer for CustomerQueryParams"""
 

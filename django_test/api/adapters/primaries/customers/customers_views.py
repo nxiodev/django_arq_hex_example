@@ -6,8 +6,9 @@ from api.engine.domain.exceptions import exceptions_customers as exceptions
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+# from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import DjangoModelPermissions
 
-# from rest_framework.serializers import Serializer
 from . import customers_serializer
 from compartidos.serializers import NotFoundSerializer
 from apps.webApp.models import customers as customers_models
@@ -23,6 +24,8 @@ class CustomersViewSet(viewsets.GenericViewSet):
     """
 
     serializer_class = customers_serializer.CustomersSerializer
+    # permission_classes = [DjangoModelPermissions]
+    # queryset = customers_models.Customer.objects.all()
 
     @swagger_auto_schema(
         query_serializer=customers_serializer.CustomerQueryParamsSerializer(),

@@ -1,16 +1,13 @@
-# engine
-# from api.engine.use_cases.ports import primaries
 import typing
 
+# engine
 from api.engine.use_cases.ports.secondaries import repository_customers as repository
 from api.engine.use_cases.factory import orm_mapper
 from api.engine.domain.entities import entities_customers as entity
-from api.engine.domain.exceptions import exceptions_customers as exceptions
-
 
 # orm
 from apps.webApp.models import customers as models_customers
-from django.db import transaction
+# from django.db import transaction
 
 
 class Customer(repository.Customer):

@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -12,10 +13,20 @@ class CustomersAPITest(TestCase):
 
     fixtures = [
         "fixtures/customers.json",
+        # "fixtures/gral_dump.json",
     ]
+
+    # test_user = User.objects.create_user(
+    #     username="test_user",
+    #     email="test@test.io",
+    #     password="admin123",
+    #     is_staff=True,
+    #     is_superuser=True
+    # )
 
     def setUp(self) -> None:
         self.client = APIClient()
+        # self.client.login(username="test_user", password='admin123')
 
     def test_list_customers(self):
         url = reverse("crud-customers")
