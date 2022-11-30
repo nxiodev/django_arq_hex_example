@@ -44,9 +44,9 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Rest Framework
     "corsheaders",
-    "rest_framework_simplejwt.token_blacklist",
     "rest_framework",
     "drf_yasg",
+    "rest_framework_simplejwt",
     # Apps
     "apps.webApp",
     "apps.backoffice",
@@ -61,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "querycount.middleware.QueryCountMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = "configuracion.urls"
@@ -144,9 +145,20 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 1000,
-    # "DEFAULT_PERMISSION_CLASSES": (
-    #     "rest_framework.permissions.DjangoModelPermissions",
-    # )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+SWAGGER_SETTINGS = {
+    # 'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 # Default primary key field type

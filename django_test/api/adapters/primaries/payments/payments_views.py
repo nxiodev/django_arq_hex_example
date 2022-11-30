@@ -24,8 +24,8 @@ class CustomersPaymentsViewSet(viewsets.GenericViewSet):
     """
 
     serializer_class = payments_serializer.PaymentsCustomersSerializer
-    # permission_classes = [DjangoModelPermissions]
-    # queryset = customers_models.PaymentsCustomer.objects.all()
+    permission_classes = [DjangoModelPermissions]
+    queryset = customers_models.PaymentsCustomer.objects.all()
 
     @swagger_auto_schema(
         query_serializer=payments_serializer.CustomerQueryParamsSerializer(),
@@ -59,7 +59,7 @@ class CustomersPaymentsViewSet(viewsets.GenericViewSet):
         payments_list_serializer = payments_serializer.PaymentsCustomersSerializer(
             data=payments, many=True
         )
-        payments_list_serializer.is_valid(raise_exception=True)
+        payments_list_serializer.is_valid(raise_exception=False)
 
         page = self.paginate_queryset(payments)
         if page is not None:

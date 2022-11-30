@@ -8,3 +8,5 @@ class PaymentsCustomer:
     customer_id: int
     product_name: str
     quantity: int
+    created_at: str
+    updated_at: str

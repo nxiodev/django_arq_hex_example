@@ -24,8 +24,8 @@ class CustomersViewSet(viewsets.GenericViewSet):
     """
 
     serializer_class = customers_serializer.CustomersSerializer
-    # permission_classes = [DjangoModelPermissions]
-    # queryset = customers_models.Customer.objects.all()
+    permission_classes = [DjangoModelPermissions]
+    queryset = customers_models.Customer.objects.all()
 
     @swagger_auto_schema(
         query_serializer=customers_serializer.CustomerQueryParamsSerializer(),

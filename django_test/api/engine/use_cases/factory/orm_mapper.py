@@ -18,5 +18,7 @@ def constructor_payment_entities(payment_orm) -> entities_payments.PaymentsCusto
         amount=payment_orm.amount,
         product_name=payment_orm.product_name,
         quantity=payment_orm.quantity,
+        created_at=payment_orm.created_at,
+        updated_at=payment_orm.updated_at,
     )
 

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
+from apps.backoffice.models.administrators import Administrator
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -12,28 +12,36 @@ class CustomersAPITest(TestCase):
     """API for testing customer's CRUD"""
 
     fixtures = [
-        "fixtures/customers.json",
-        # "fixtures/gral_dump.json",
+        "fixtures/data.json",
     ]
 
-    # test_user = User.objects.create_user(
-    #     username="test_user",
-    #     email="test@test.io",
-    #     password="admin123",
-    #     is_staff=True,
-    #     is_superuser=True
-    # )
+    def get_credentials(self, email, password):
+        url = reverse("token_obtain")
+        response = self.client.post(url, {
+            'email': email,
+            'password': password
+        })
+        return response.data
 
     def setUp(self) -> None:
         self.client = APIClient()
-        # self.client.login(username="test_user", password='admin123')
+
+        self.email = "dj-superadmin@paycode.io"
+        self.password = "admin123"
+        self.user = Administrator.objects.get(email=self.email)
+        self.api_authentication(self.user.email, self.password)
+
+    def api_authentication(self, email: str, password: str):
+        credentials = self.get_credentials(email, password)
+        token = credentials.get('access')
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
 
     def test_list_customers(self):
         url = reverse("crud-customers")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_crear_customers(self):
+    def test_create_customers(self):
         url = reverse("crud-customers")
         payload = {
             "name": "string",

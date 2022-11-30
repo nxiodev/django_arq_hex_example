@@ -9,8 +9,8 @@ class PaymentsCustomersSerializer(serializers.Serializer):
     product_name = serializers.CharField()
     amount = serializers.FloatField()
     quantity = serializers.IntegerField()
-    created_at = serializers.DateField()
-    updated_at = serializers.DateField()
+    created_at = serializers.DateTimeField()
+    updated_at = serializers.DateTimeField()
 
 
 class CustomerQueryParamsSerializer(serializers.Serializer):
