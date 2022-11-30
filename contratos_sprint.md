@@ -4,15 +4,15 @@
 ## 1. ListarCustomers
 ### URL:
 ```
-/customers/
+/customers
 ```
 ### METHOD:
 #### GET
 ### PARAMS:
 ```
-?busqueda=str
+?customer_id=int
 ````
-el param de búsqueda no es obligatorio y sirve para buscar customeres por nombre, apellido y email.
+el param de customer_id no es obligatorio y sirve para devolver el detalle del customer
 ### BODY:
 ```
 null
@@ -54,14 +54,16 @@ La respuesta es páginada teniendo como carga útil el array results.
 ## 2. ListarPaymentsCustomers
 ### URL:
 ```
-/payments_customers/
+/payments
 ```
 ### METHOD:
 #### GET
 ### PARAMS:
 ```
-null
+?customer_id=int
 ````
+
+el param de customer_id no es obligatorio y sirve para devolver los pagos del customer
 
 ### BODY:
 ```

@@ -1,4 +1,5 @@
 from django.urls import include, path, re_path
+from rest_framework.permissions import DjangoModelPermissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -9,13 +10,13 @@ schema_view = get_schema_view(
         description="Esta api es un ejemplo de como se puede implementar una api para un sistema de pagos",
     ),
     public=True,
-    permission_classes=(),
-    authentication_classes=(),
+    permission_classes=[DjangoModelPermissions],
+    # authentication_classes=[IsAuthenticated],
 )
 
 urlpatterns = [
     path("", include("api.adapters.primaries.customers.urls")),
-    # path("", include("apps.authentication.urls")),
+    path("", include("api.adapters.primaries.payments.urls")),
 
     re_path(
         r"^swagger(?P<format>\.json|\.yaml)$",

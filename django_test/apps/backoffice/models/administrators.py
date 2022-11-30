@@ -4,7 +4,7 @@ from compartidos.models import TimestampedModel
 
 
 class Administrator(AbstractBaseUser, PermissionsMixin, TimestampedModel):
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField(max_length=50, unique=True)
     is_active = models.BooleanField(default=True)
