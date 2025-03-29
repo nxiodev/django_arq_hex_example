@@ -10,7 +10,7 @@ schema_view = get_schema_view(
         description="Esta api es un ejemplo de como se puede implementar una api para un sistema de pagos",
     ),
     public=True,
-    permission_classes=[DjangoModelPermissions],
+    # permission_classes=[DjangoModelPermissions],
     # authentication_classes=[IsAuthenticated],
 )
 
@@ -28,4 +28,4 @@ urlpatterns = [
         schema_view.with_ui("swagger", cache_timeout=0),
         name="schema-swagger-ui",
     ),
-    ]
+]

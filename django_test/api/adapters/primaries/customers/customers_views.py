@@ -12,6 +12,7 @@ from rest_framework.permissions import DjangoModelPermissions
 from . import customers_serializer
 from compartidos.serializers import NotFoundSerializer
 from apps.webApp.models import customers as customers_models
+from apps.webApp.models import products as alarms_models
 
 # engine implementation
 customers_repository = customers_repo.constructor_customers(customers_models.Customer)
@@ -197,3 +198,33 @@ class CustomersViewSet(viewsets.GenericViewSet):
             )
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class AlarmViewSet(viewsets.GenericViewSet):
+    """
+    Alarm's CRUD ViewSet
+    """
+
+    serializer_class = customers_serializer.ProductSerializer()
+
+    @swagger_auto_schema(
+        query_serializer=customers_serializer.AlarmQueryParamsSerializer(),
+        responses={
+            status.HTTP_200_OK: customers_serializer.ProductSerializer(),
+            status.HTTP_404_NOT_FOUND: NotFoundSerializer,
+        },
+    )
+    def list_alarms(self, request) -> Response:
+
+        products = alarms_models.Product.objects.all().prefetch_related('alarms')
+
+        for product in products:
+            product.alarms.set([alarm.__dict__ for alarm in product.alarms.all()])
+
+        products_dict = [product.__dict__ for product in products]
+
+        products_serialized = customers_serializer.ProductSerializer(data=products_dict, many=True)
+
+        products_serialized.is_valid(raise_exception=False)
+
+        return Response(data=products_serialized.data, status=status.HTTP_200_OK)
