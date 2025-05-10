@@ -3,9 +3,16 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 # from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import DjangoModelPermissions
-
 from . import users_serializer
 from compartidos.serializers import NotFoundSerializer
+
+#Agregado Donovan
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+
+from django_test.api.engine.use_cases.services.change_password import change_password_user
+from .users_serializer import ChangePasswordSerializer  # asegúrate de importar bien el serializer
+
 
 
 class UsersViewSet(viewsets.GenericViewSet):
@@ -37,3 +44,25 @@ class UsersViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=ChangePasswordSerializer,
+        responses={
+            status.HTTP_200_OK: "Contraseña cambiada correctamente.",
+            status.HTTP_400_BAD_REQUEST: "Datos inválidos.",
+        },
+    )
+    @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
+    def change_password(self, request):
+        """Cambia la contraseña del usuario autenticado"""
+        serializer = ChangePasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            change_password_user(
+                user=request.user,
+                old_password=serializer.validated_data["old_password"],
+                new_password=serializer.validated_data["new_password"],
+            )
+            return Response({"detail": "Contraseña cambiada correctamente."}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
