@@ -8,7 +8,7 @@ from apps.backoffice.models import Administrator
 from . import users_serializer
 from compartidos.serializers import NotFoundSerializer
 
-#Agregado Donovan
+# Agregado Donovan
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -22,6 +22,7 @@ from django.core.exceptions import ValidationError
 class UsersViewSet(viewsets.GenericViewSet, APIView):
     # queryset =
     serializer_class = users_serializer.InfoMeSerializer
+
     # permission_classes = [DjangoModelPermissions]
 
     @swagger_auto_schema(
@@ -49,44 +50,37 @@ class UsersViewSet(viewsets.GenericViewSet, APIView):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(
-        request_body=ChangePasswordSerializer,
-        responses={
-            status.HTTP_200_OK: "Contraseña cambiada correctamente.",
-            status.HTTP_400_BAD_REQUEST: "Datos inválidos.",
-        },
-    )
-    @action(detail=False, methods=["post"], permission_classes=[IsAuthenticated])
+    # @swagger_auto_schema(
+    #     request_body=ChangePasswordSerializer,
+    #     responses={
+    #         status.HTTP_200_OK: "Contraseña cambiada correctamente.",
+    #         status.HTTP_400_BAD_REQUEST: "Datos inválidos.",
+    #     },
+    # )
     def change_password(self, request):
         """Cambia la contraseña del usuario autenticado"""
         serializer = ChangePasswordSerializer(data=request.data)
 
         if serializer.is_valid():
-            change_password_user(
-                user=request.user,
-                old_password=serializer.validated_data["old_password"],
-                new_password=serializer.validated_data["new_password"],
-            )
+            user = request.user
+            old_password = serializer.validated_data["old_password"]
+            new_password = serializer.validated_data["new_password"]
+
+            if old_password and not user.check_password(old_password):
+                raise ValidationError({'old_password': 'La contraseña actual no es correcta'})
+
+            user.set_password(new_password)
+            user.save()
             return Response({"detail": "Contraseña cambiada correctamente."}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(
+        responses={
+            status.HTTP_200_OK: "List users"
+        },
+    )
     def list_users(self, request):
         users = Administrator.objects.all()
         serializer = users_serializer.InfoMeSerializer(users, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def recovery_password(self, request):
-        username = request.data.get("username")
-        email = request.data.get("email")
-        new_password = request.data.get("new_password")
-
-        if not email or not new_password:
-            return Response({"error": "Faltan campos obligatorios"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            recovery_password_user(username, email, new_password)
-        except ValidationError as e:
-            return Response({"error": e.message_dict}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({"message": "Contraseña actualizada exitosamente"}, status=status.HTTP_200_OK)

@@ -3,11 +3,11 @@ from .users_views import UsersViewSet
 
 info_me = {"get": "info_me"}
 
-change_password = {"post": "change_password"}
+change_password = {"put": "change_password"}
 
 crud_users = {"get": "list_users"}
 
-recovery_password = {"post" : "recovery_password"}
+recovery_password = {"post": "change_password"}
 
 urlpatterns = [
     path(
